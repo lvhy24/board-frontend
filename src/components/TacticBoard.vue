@@ -247,12 +247,12 @@
 </template>
 
 <script setup lang="ts">
-import axios from 'axios'
 import { computed, onMounted, ref, nextTick } from 'vue'
 import router from '@/router';
 import { Stage, Layer, Image, Circle,Group,Text} from 'vue-konva';
 import type { Ref } from 'vue'
 import { useRoute } from 'vue-router'
+import { tacticAPI } from '@/services/api'
 
 const route = useRoute()
 const tacticName = ref('') // 绑定输入框
@@ -593,13 +593,11 @@ const save = async () => {
   
   try {
     if (currentEditingId.value != 0 && currentEditingId.value != 1) { // 更新模式
-      const { data } = await axios.put(
-        `https://board-backend-production-3c99.up.railway.app/api/tactics/${currentEditingId.value}`, dto
-      )
+      const { data } = await tacticAPI.updateTactic(currentEditingId.value, dto)
       alert(`已更新战术：${data.title} (ID=${data.id})`)
       router.push(`/self/tactic/${data.id}`)
     } else {
-      const { data } = await axios.post('https://board-backend-production-3c99.up.railway.app/api/tactics', dto)
+      const { data } = await tacticAPI.createTactic(dto)
       alert(`已保存: ${data.title} (ID=${data.id})`)
       router.push(`/self/tactic/${data.id}`)
       currentEditingId.value = data.id
@@ -614,7 +612,7 @@ const save = async () => {
 // 获取所有战术列表
 const loadTacticList = async () => {
   try {
-    const { data } = await axios.get('https://board-backend-production-3c99.up.railway.app/api/tactics')
+    const { data } = await tacticAPI.getTacticList()
     tacticList.value = data
     console.log('加载列表', data)
   } catch (e) {
@@ -625,7 +623,7 @@ const loadTacticList = async () => {
 // 根据ID加载战术
 const loadTactic = async (id: number) => {
   try {
-    const { data } = await axios.get(`https://board-backend-production-3c99.up.railway.app/api/tactics/${id}`)
+    const { data } = await tacticAPI.getTacticById(id)
     frames.value = JSON.parse(data.framesJson)
     currentFrameIndex.value = Math.min(1, frames.value.length - 1)
     currentEditingId.value = id
@@ -664,7 +662,7 @@ const deleteTactic = async (id: Number, event: Event) => {
   }
   
   try {
-    await axios.delete(`https://board-backend-production-3c99.up.railway.app/api/tactics/${id}`)
+    await tacticAPI.deleteTactic(id as number)
     alert('删除成功')
     router.push('/self')
     resetToDefault()
