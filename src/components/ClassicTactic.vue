@@ -317,7 +317,7 @@ const progressPercent = computed(() => {
 // 获取所有战术列表
 const loadTacticList = async () => {
   try {
-    const { data } = await axios.get('http://board-backend-production-3c99.up.railway.app/api/tactics')
+    const { data } = await axios.get('https://board-backend-production-3c99.up.railway.app/api/tactics')
     tacticList.value = data
     console.log('加载列表', data)
   } catch (e) {
@@ -328,7 +328,7 @@ const loadTacticList = async () => {
 // 根据ID加载战术
 const loadTactic = async (id: number) => {
   try {
-    const { data } = await axios.get(`http://board-backend-production-3c99.up.railway.app/api/tactics/${id}`)
+    const { data } = await axios.get(`https://board-backend-production-3c99.up.railway.app/api/tactics/${id}`)
     frames.value = JSON.parse(data.framesJson)
     currentFrameIndex.value = Math.min(1, frames.value.length - 1)
     tacticName.value = data.title
@@ -365,7 +365,7 @@ const deleteTactic = async (id: Number, event: Event) => {
   }
   
   try {
-    await axios.delete(`http://board-backend-production-3c99.up.railway.app/api/tactics/${id}`)
+    await axios.delete(`https://board-backend-production-3c99.up.railway.app/api/tactics/${id}`)
     alert('删除成功')
     router.push('/self')
     resetToDefault()
