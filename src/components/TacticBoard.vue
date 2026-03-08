@@ -594,12 +594,12 @@ const save = async () => {
   try {
     if (currentEditingId.value != 0 && currentEditingId.value != 1) { // 更新模式
       const { data } = await axios.put(
-        `http://board-backend-production-3c99.up.railway.app/api/tactics/${currentEditingId.value}`, dto
+        `https://board-backend-production-3c99.up.railway.app/api/tactics/${currentEditingId.value}`, dto
       )
       alert(`已更新战术：${data.title} (ID=${data.id})`)
       router.push(`/self/tactic/${data.id}`)
     } else {
-      const { data } = await axios.post('http://board-backend-production-3c99.up.railway.app/api/tactics', dto)
+      const { data } = await axios.post('https://board-backend-production-3c99.up.railway.app/api/tactics', dto)
       alert(`已保存: ${data.title} (ID=${data.id})`)
       router.push(`/self/tactic/${data.id}`)
       currentEditingId.value = data.id
@@ -614,7 +614,7 @@ const save = async () => {
 // 获取所有战术列表
 const loadTacticList = async () => {
   try {
-    const { data } = await axios.get('http://board-backend-production-3c99.up.railway.app/api/tactics')
+    const { data } = await axios.get('https://board-backend-production-3c99.up.railway.app/api/tactics')
     tacticList.value = data
     console.log('加载列表', data)
   } catch (e) {
@@ -625,7 +625,7 @@ const loadTacticList = async () => {
 // 根据ID加载战术
 const loadTactic = async (id: number) => {
   try {
-    const { data } = await axios.get(`http://board-backend-production-3c99.up.railway.app/api/tactics/${id}`)
+    const { data } = await axios.get(`https://board-backend-production-3c99.up.railway.app/api/tactics/${id}`)
     frames.value = JSON.parse(data.framesJson)
     currentFrameIndex.value = Math.min(1, frames.value.length - 1)
     currentEditingId.value = id
@@ -664,7 +664,7 @@ const deleteTactic = async (id: Number, event: Event) => {
   }
   
   try {
-    await axios.delete(`http://board-backend-production-3c99.up.railway.app/api/tactics/${id}`)
+    await axios.delete(`https://board-backend-production-3c99.up.railway.app/api/tactics/${id}`)
     alert('删除成功')
     router.push('/self')
     resetToDefault()
